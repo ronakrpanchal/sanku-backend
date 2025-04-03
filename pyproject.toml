@@ -1,0 +1,19 @@
+[project]
+name = "gymbro"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "sankalpaacharya", email = "sankalpaacharya01@gmail.com"},
+]
+dependencies = ["fastapi[standard]>=0.115.12"]
+requires-python = "==3.11.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false
+
+
+[tool.pdm.scripts]
+start = "uvicorn app.main:app --reload"
