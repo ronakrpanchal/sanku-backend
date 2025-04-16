@@ -1,0 +1,14 @@
+{
+    "files.exclude": {
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/.DS_Store": true,
+      "**/Thumbs.db": true,
+      "**/__pycache__": true,
+      "**/.venv": true,
+      ".venv": true
+    },
+    "explorerExclude.backup": {},
+    "editor.formatOnSave": true
+  }

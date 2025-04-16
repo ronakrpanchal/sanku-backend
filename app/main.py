@@ -1,10 +1,10 @@
 from fastapi import FastAPI
-from app.routes import chat
+from app.routers import chat
 
 
-app = FastAPI(title="Gymbro Backend")
+app = FastAPI(title="Sanku Backend")
 
-app.include_router(chat.router,tags=["Chat"],prefix="/chat")
+app.include_router(chat.router)
 
 
 @app.get("/")
