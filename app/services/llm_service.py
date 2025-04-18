@@ -1,66 +1,32 @@
 from openai import AsyncOpenAI
-from groq import Groq
-from app.config.settings import Settings
-from abc import ABC, abstractmethod
+from groq import AsyncGroq
+from app.config.settings import settings
 from app.config.loggers import llm_logger
 
-class BaseLLMClient(ABC):
 
-    @abstractmethod
-    async def chat(self, prompt: str) -> str:
-        pass
-
-
-
-class OpenAIClient(BaseLLMClient):
-    def __init__(self):
-        llm_logger.info("Initializing OpenAIClient")
-        self.client = AsyncOpenAI(api_key=Settings.OPENAI_API_KEY)
-
-    async def chat(self, prompt: str) -> str:
-        llm_logger.info(f"OpenAIClient sending prompt: {prompt}")
-        try:
-            response = await self.client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": prompt}]
-            )
-            content = response.choices[0].message.content
-            llm_logger.info(f"OpenAIClient received response: {content}")
-            return content
-        except Exception as e:
-            llm_logger.error(f"OpenAIClient error: {e}")
-            raise
-
-
-
-class GroqClient(BaseLLMClient):
-    def __init__(self):
-        llm_logger.info("Initializing GroqClient")
-        self.client = Groq(api_key=Settings.GROQ_API_KEY)
-
-    async def chat(self, prompt: str) -> str:
-        llm_logger.info(f"GroqClient sending prompt: {prompt}")
-        try:
-            response = await self.client.chat.completions.create(
-                model="llama2-70b-chat",
-                messages=[{"role": "user", "content": prompt}],
-                tools=[]
-            )
-            content = response.choices[0].message.content
-            llm_logger.info(f"GroqClient received response: {content}")
-            return content
-        except Exception as e:
-            llm_logger.error(f"GroqClient error: {e}")
-            raise
-
-
-def get_llm_client(provider: str) -> BaseLLMClient:
-    llm_logger.info(f"Requested LLM provider: {provider}")
+def get_llm_client_and_model(provider: str):
     if provider == "openai":
-        return OpenAIClient()
+        return AsyncOpenAI(api_key=settings.OPENAI_API_KEY), "gpt-3.5-turbo"
     elif provider == "groq":
-        return GroqClient()
+        return AsyncGroq(api_key=settings.GROQ_API_KEY), "llama2-70b-chat"
     else:
-        error_msg = f"Invalid LLM provider: {provider}"
-        llm_logger.error(error_msg)
-        raise ValueError(error_msg)
+        llm_logger.error(f"Unsupported LLM provider: {provider}")
+        raise ValueError(f"Unsupported LLM provider: {provider}")
+
+
+async def chat_with_stream(provider: str, query: str) -> str:
+    client, model = get_llm_client_and_model(provider)
+    llm_logger.info(f"{provider.capitalize()} sending prompt: {query}")
+    try:
+        response = await client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": query}],
+            stream=True
+        )
+        content = response.choices[0].message.content
+        llm_logger.info(f"{provider.capitalize()} received response: {content}")
+        return content
+    except Exception as e:
+        llm_logger.error(f"{provider.capitalize()} LLM error: {e}")
+        raise
+
