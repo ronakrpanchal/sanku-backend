@@ -10,20 +10,20 @@ router = APIRouter(tags=["Chat"])
 
 @router.post("/chat")
 async def chat(body:ChatRequest):
-    data = await chat_with_stream(provider="opsadasjdaskjenai",query=body.query)
+    data = await chat_with_stream(provider="groq",query=body.query)
     llm_logger.info("chat route is working fine")
     return {"message":data}
 
 
 async def make_bytes():
     for i in range(10):
-        yield f"data: chunk {i}\n\n"
+        yield f"data: chunk {i}"
         await asyncio.sleep(0.1)
 
 
 @router.post("/chat-stream")
 async def chat_stream():
     return StreamingResponse(
-        make_bytes(),
+        chat_with_stream(provider="openai",query="write a python code to make simple todo app. Make sure to provide it in markdown format"),
     )
 
