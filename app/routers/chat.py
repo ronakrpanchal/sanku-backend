@@ -21,7 +21,7 @@ async def chat(body:ChatRequest):
 async def chat_stream():
     try:
         return StreamingResponse(
-            chat_with_stream(provider="groq",query="Hello"),
+            chat_with_stream(provider="openai",query="suggest me good songs to listen rn"),
         )
     except Exception as e:
         return str(e)
