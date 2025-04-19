@@ -3,7 +3,8 @@ from groq import AsyncGroq
 from app.config.settings import settings
 from app.config.loggers import llm_logger
 from typing import AsyncGenerator
-import asyncio
+from app.utils.prompt_utils import prompt_render
+from app.models.prompt_models import ChatPrompt
 
 
 def get_llm_client_and_model(provider: str):
@@ -20,10 +21,11 @@ def get_llm_client_and_model(provider: str):
 async def chat_with_stream(provider: str, query: str) -> AsyncGenerator[str,None]:
     client, model = get_llm_client_and_model(provider)
     llm_logger.info(f"{provider.capitalize()} sending prompt: {query}")
+    chat_prompt = prompt_render(prompt_obj=ChatPrompt(query=query))
     try:
         response = await client.chat.completions.create(
             model=model,
-            messages=[{"role": "user", "content": query}],
+            messages=[{"role": "user", "content": chat_prompt}],
             stream=True
         )
         stream_response = ""
@@ -32,9 +34,8 @@ async def chat_with_stream(provider: str, query: str) -> AsyncGenerator[str,None
                 content = chunk.choices[0].delta.content
                 if content:
                     stream_response+=content
-                    print(content)
                     yield f"data: {content}\n\n"
-        llm_logger.info(f"{provider.capitalize()} received response:{stream_response[:100]}")
+        llm_logger.info(f"{provider.capitalize()} received response")
     except Exception as e:
         llm_logger.error(f"{provider.capitalize()} LLM error: {e}")
         raise

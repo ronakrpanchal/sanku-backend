@@ -4,4 +4,4 @@ from typing import Optional
 
 class ChatRequest(BaseModel):
     conversation_id:Optional[str] = None
-    query:str
+    query:str 

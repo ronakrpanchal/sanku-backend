@@ -1,29 +1,28 @@
 from fastapi import APIRouter
 from app.config.loggers import llm_logger
-from app.services.llm_service import chat_with_stream
+from app.services.chat_service import chat_with_stream
 from app.models.general_models import ChatRequest
 from fastapi.responses import StreamingResponse
-import asyncio
+from app.utils.prompt_utils import prompt_render
+from app.models.prompt_models import ChatPrompt
 
 
 router = APIRouter(tags=["Chat"])
 
 @router.post("/chat")
 async def chat(body:ChatRequest):
-    data = await chat_with_stream(provider="groq",query=body.query)
+
     llm_logger.info("chat route is working fine")
-    return {"message":data}
-
-
-async def make_bytes():
-    for i in range(10):
-        yield f"data: chunk {i}"
-        await asyncio.sleep(0.1)
+    chat_prompt = prompt_render(prompt_obj=ChatPrompt(query="Hello how you doing?"))
+    return {"message":"it is fun"}
 
 
 @router.post("/chat-stream")
 async def chat_stream():
-    return StreamingResponse(
-        chat_with_stream(provider="openai",query="write a python code to make simple todo app. Make sure to provide it in markdown format"),
-    )
+    try:
+        return StreamingResponse(
+            chat_with_stream(provider="groq",query="Hello"),
+        )
+    except Exception as e:
+        return str(e)
 
