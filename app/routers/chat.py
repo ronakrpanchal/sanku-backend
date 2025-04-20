@@ -21,7 +21,7 @@ async def chat(body:ChatRequest):
 async def chat_stream():
     try:
         return StreamingResponse(
-            chat_with_stream(provider="openai",query="how are you?"),
+            chat_with_stream(provider="openai",query="prodive me best eassy on nepal"),
         )
     except Exception as e:
         return str(e)

@@ -5,8 +5,10 @@ class Settings(BaseSettings):
    OPENAI_API_KEY:str
    MILVUS_URL:str
    MILVUS_TOKEN:str
-
-
+   FASTAPI_KEY:str
+   GOOGLE_CLIENT_ID:str
+   GOOGLE_CLIENT_SECRET:str
+   FASTAPI_KEY:str
 
 
    class Config:
