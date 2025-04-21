@@ -9,7 +9,6 @@ def prompt_render(prompt_obj: BaseModel) -> str:
     filename = getattr(prompt_obj, "filename", None)
     if not filename:
         raise ValueError("Prompt object must include a 'filename' field.")
-
     template = env.get_template(filename)
     data = prompt_obj.model_dump()
 
