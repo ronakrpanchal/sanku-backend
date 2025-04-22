@@ -32,10 +32,10 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
 
 
 def get_current_user(token: str = Cookie(None)):
-    # if not token:
-    #     raise HTTPException(status_code=401, detail="Not authenticated")
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
     try:
-        payload = jwt.decode("eyJsb2dpbl9yZWRpcmVjdCI6ICJodHRwOi8vbG9jYWxob3N0OjgwMDAvIn0=.aAaJjg.A9i-2p0fn50O1PneOzL0scxXW3E", settings.FASTAPI_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token, settings.FASTAPI_KEY, algorithms=["HS256"])
         return {"user_id": payload.get("sub"), "email": payload.get("email")}
     except ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token expired")

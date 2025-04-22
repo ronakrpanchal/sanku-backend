@@ -14,6 +14,7 @@ async def chat(body:ChatRequest):
 
     llm_logger.info("chat route is working fine")
     chat_prompt = prompt_render(prompt_obj=ChatPrompt(query="Hello how you doing?"))
+
     return {"message":"it is fun"}
 
 

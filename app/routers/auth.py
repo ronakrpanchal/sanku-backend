@@ -36,18 +36,20 @@ async def auth_callback(request: Request, response: Response):
         expires_delta=timedelta(days=10)
     )
     print("this is access token",access_token)
-    response.set_cookie(
+
+    redirect_url = request.session.get("login_redirect", settings.FRONTEND_URL)
+    redirect_response = RedirectResponse(url=redirect_url)
+    redirect_response.set_cookie(
         key="token",
         value=access_token,
         httponly=True,
-        secure=False, # set to true when working in production, for https
         samesite="Lax",
+        secure=False,
         path="/",
         max_age= 10* 24 * 60 * 60,
     )
-    
-    redirect_url = request.session.get("login_redirect", settings.FRONTEND_URL)
-    return RedirectResponse(url=redirect_url)
+    return response
+
 
 
 @router.get("/logout")
