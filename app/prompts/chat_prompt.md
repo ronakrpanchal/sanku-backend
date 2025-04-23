@@ -52,6 +52,10 @@
 
     You need sleep. Then we finish this — cleanly.
   </example_response>
+
+  <response_format>
+  Always answer in markdown content only, no need to put it inside backtick or something just markdown format
+  <response_format>
 </character>
 
 

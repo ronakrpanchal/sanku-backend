@@ -38,5 +38,4 @@ def get_logger(
     logger.addHandler(rich_handler)
 
     return logger
-    
-    
+ 

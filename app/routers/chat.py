@@ -14,6 +14,7 @@ async def chat(body:ChatRequest):
 
     llm_logger.info("chat route is working fine")
     chat_prompt = prompt_render(prompt_obj=ChatPrompt(query="Hello how you doing?"))
+
     return {"message":"it is fun"}
 
 
@@ -21,7 +22,7 @@ async def chat(body:ChatRequest):
 async def chat_stream():
     try:
         return StreamingResponse(
-            chat_with_stream(provider="openai",query="how are you?"),
+            chat_with_stream(provider="openai",query="prodive me best eassy on nepal"),
         )
     except Exception as e:
         return str(e)
