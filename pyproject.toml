@@ -5,7 +5,7 @@ description = "Default template for PDM package"
 authors = [
     {name = "sankalpaacharya", email = "sankalpaacharya01@gmail.com"},
 ]
-dependencies = ["fastapi>=0.115.12", "pydantic-settings>=2.8.1", "logging>=0.4.9.6", "openai>=1.74.0", "groq>=0.22.0", "pymilvus>=2.5.6", "sqlmodel>=0.0.24", "python-dotenv>=1.1.0", "requests>=2.32.3", "uvicorn>=0.34.2", "authlib>=1.5.2", "pyjwt>=2.10.1", "itsdangerous>=2.2.0", "google-auth>=2.39.0", "python-jose>=3.4.0", "neon-api>=0.3.0"]
+dependencies = ["fastapi>=0.115.12", "pydantic-settings>=2.8.1", "logging>=0.4.9.6", "openai>=1.74.0", "groq>=0.22.0", "pymilvus>=2.5.6", "sqlmodel>=0.0.24", "python-dotenv>=1.1.0", "requests>=2.32.3", "uvicorn>=0.34.2", "authlib>=1.5.2", "pyjwt>=2.10.1", "itsdangerous>=2.2.0", "google-auth>=2.39.0", "python-jose>=3.4.0", "neon-api>=0.3.0", "pre-commit>=4.2.0"]
 requires-python = "==3.11.*"
 readme = "README.md"
 license = {text = "MIT"}
