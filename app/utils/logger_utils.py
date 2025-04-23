@@ -4,7 +4,7 @@ from typing import Optional
 from rich.logging import RichHandler
 import os
 
-# testing pre commit hook
+
 def get_logger(
     name: Optional[str] = None,
     log_file: str = "app.log",
