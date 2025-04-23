@@ -8,7 +8,6 @@ from app.config.loggers import app_logger
 router = APIRouter(tags=["Auth"])
 
 
-
 @router.get("/login")
 async def login(request: Request):
     request.session.clear()
@@ -28,13 +27,10 @@ async def auth_callback(request: Request):
         "sub": user_info["sub"],
         "email": user_info["email"],
         "name": user_info.get("name"),
-        "picture": user_info.get("picture")
+        "picture": user_info.get("picture"),
     }
-    
-    access_token = create_access_token(
-        data=user_data,
-        expires_delta=timedelta(days=10)
-    )
+
+    access_token = create_access_token(data=user_data, expires_delta=timedelta(days=10))
 
     redirect_url = request.session.get("login_redirect", settings.FRONTEND_URL)
     redirect_response = RedirectResponse(url=redirect_url)
@@ -45,17 +41,15 @@ async def auth_callback(request: Request):
         samesite="Lax",
         secure=False,
         path="/",
-        max_age= 10* 24 * 60 * 60,
+        max_age=10 * 24 * 60 * 60,
     )
     return redirect_response
-
 
 
 @router.get("/logout")
 async def logout(response: Response):
     response.delete_cookie(key="token")
     return RedirectResponse(url=settings.FRONTEND_URL)
-
 
 
 @router.get("/me")

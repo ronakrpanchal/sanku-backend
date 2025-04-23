@@ -2,7 +2,10 @@ from jinja2 import Environment, FileSystemLoader
 from pydantic import BaseModel
 from pathlib import Path
 
-env = Environment(loader=FileSystemLoader(Path(__file__).resolve().parent.parent / "prompts"))
+env = Environment(
+    loader=FileSystemLoader(Path(__file__).resolve().parent.parent / "prompts")
+)
+
 
 def prompt_render(prompt_obj: BaseModel) -> str:
     filename = getattr(prompt_obj, "filename", None)

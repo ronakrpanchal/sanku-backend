@@ -18,7 +18,7 @@ def get_llm_client_and_model(provider: str):
         raise ValueError(error_msg)
 
 
-async def chat_with_stream(provider: str, query: str) -> AsyncGenerator[str,None]:
+async def chat_with_stream(provider: str, query: str) -> AsyncGenerator[str, None]:
     client, model = get_llm_client_and_model(provider)
     llm_logger.info(f"{provider.capitalize()} sending prompt: {query}")
     chat_prompt = prompt_render(prompt_obj=ChatPrompt(query=query))
@@ -26,17 +26,18 @@ async def chat_with_stream(provider: str, query: str) -> AsyncGenerator[str,None
         response = await client.chat.completions.create(
             model=model,
             messages=[{"role": "user", "content": chat_prompt}],
-            stream=True
+            stream=True,
         )
         stream_response = ""
         async for chunk in response:
-            if hasattr(chunk.choices[0],"delta") and hasattr(chunk.choices[0].delta,"content"):
+            if hasattr(chunk.choices[0], "delta") and hasattr(
+                chunk.choices[0].delta, "content"
+            ):
                 content = chunk.choices[0].delta.content
                 if content:
-                    stream_response+=content
+                    stream_response += content
                     yield f"data: {content}\n\n"
         llm_logger.info(f"{provider.capitalize()} received response")
     except Exception as e:
         llm_logger.error(f"{provider.capitalize()} LLM error: {e}")
         raise
-

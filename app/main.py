@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import chat,auth
+from app.routers import chat, auth
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from app.config.settings import settings
@@ -23,5 +23,4 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"AI":"Hello Humans!"}
-
+    return {"AI": "Hello Humans!"}

@@ -1,7 +1,7 @@
 from authlib.integrations.starlette_client import OAuth
 from app.config.settings import settings
 from datetime import datetime, timedelta
-from fastapi import HTTPException,Cookie
+from fastapi import HTTPException, Cookie
 from jose import jwt, ExpiredSignatureError, JWTError
 from app.config.loggers import app_logger
 
@@ -20,8 +20,8 @@ oauth.register(
     redirect_uri="http://127.0.0.1:8000/auth",
     jwks_uri="https://www.googleapis.com/oauth2/v3/certs",
     client_kwargs={
-    "scope": "openid profile email https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/documents"
-}
+        "scope": "openid profile email https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/documents"
+    },
 )
 
 
