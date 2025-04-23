@@ -19,14 +19,15 @@ oauth.register(
     authorize_state=settings.FASTAPI_KEY,
     redirect_uri="http://127.0.0.1:8000/auth",
     jwks_uri="https://www.googleapis.com/oauth2/v3/certs",
-    client_kwargs={"scope": "openid profile email"},
+    client_kwargs={
+    "scope": "openid profile email https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/documents"
+}
 )
 
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
     expire = datetime.utcnow() + (expires_delta or timedelta(minutes=30))
-    print("expire time",expire)
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, settings.FASTAPI_KEY, algorithm="HS256")
 

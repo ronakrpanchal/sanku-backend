@@ -5,7 +5,6 @@ from pathlib import Path
 env = Environment(loader=FileSystemLoader(Path(__file__).resolve().parent.parent / "prompts"))
 
 def prompt_render(prompt_obj: BaseModel) -> str:
-    print(__file__)
     filename = getattr(prompt_obj, "filename", None)
     if not filename:
         raise ValueError("Prompt object must include a 'filename' field.")

@@ -19,7 +19,7 @@ async def login(request: Request):
 
 
 @router.get("/google/auth")
-async def auth_callback(request: Request, response: Response):
+async def auth_callback(request: Request):
     token = await oauth.google.authorize_access_token(request)
     user_info = token.get("userinfo")
     if not user_info:
@@ -35,7 +35,6 @@ async def auth_callback(request: Request, response: Response):
         data=user_data,
         expires_delta=timedelta(days=10)
     )
-    print("this is access token",access_token)
 
     redirect_url = request.session.get("login_redirect", settings.FRONTEND_URL)
     redirect_response = RedirectResponse(url=redirect_url)
@@ -48,7 +47,7 @@ async def auth_callback(request: Request, response: Response):
         path="/",
         max_age= 10* 24 * 60 * 60,
     )
-    return response
+    return redirect_response
 
 
 
@@ -56,6 +55,7 @@ async def auth_callback(request: Request, response: Response):
 async def logout(response: Response):
     response.delete_cookie(key="token")
     return RedirectResponse(url=settings.FRONTEND_URL)
+
 
 
 @router.get("/me")

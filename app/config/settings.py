@@ -10,6 +10,7 @@ class Settings(BaseSettings):
    GOOGLE_CLIENT_SECRET:str
    FASTAPI_KEY:str
    FRONTEND_URL:str
+   DATABASE_URL:str
 
 
    class Config:
