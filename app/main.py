@@ -3,8 +3,17 @@ from app.routers import chat, auth
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from app.config.settings import settings
+from contextlib import asynccontextmanager
+from app.db.tables import create_db_tables
 
-app = FastAPI(title="Sanku Backend")
+
+@asynccontextmanager
+async def lifespan(app:FastAPI):
+    create_db_tables()
+    yield
+
+
+app = FastAPI(title="Sanku Backend",lifespan=lifespan)
 
 app.include_router(chat.router)
 app.include_router(auth.router)
