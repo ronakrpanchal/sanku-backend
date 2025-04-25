@@ -31,6 +31,8 @@ dependencies = [
     "jinja2>=3.1.6",
     "psycopg>=3.2.6",
     "psycopg2-binary>=2.9.10",
+    "asyncpg>=0.30.0",
+    "pprintpp>=0.4.0",
 ]
 
 [tool.pdm]

@@ -4,6 +4,8 @@ from app.utils.auth_utils import oauth, create_access_token, get_current_user
 from app.config.settings import settings
 from datetime import timedelta
 from app.config.loggers import app_logger
+from app.db.queries.user_queries import create_user, create_oauth_token
+from app.config.database import SessionDep
 
 router = APIRouter(tags=["Auth"])
 
@@ -17,7 +19,9 @@ async def login(request: Request):
     redirect_uri = request.url_for("auth_callback")
 
     try:
-        redirect = await oauth.google.authorize_redirect(request, redirect_uri)
+        redirect = await oauth.google.authorize_redirect(
+            request, redirect_uri, prompt="consent"
+        )
         app_logger.info(f"User redirected to Google OAuth")
         return redirect
     except Exception as e:
@@ -26,7 +30,7 @@ async def login(request: Request):
 
 
 @router.get("/google/auth")
-async def auth_callback(request: Request):
+async def auth_callback(request: Request, session: SessionDep):
     app_logger.info("Received OAuth callback from Google")
     try:
         token = await oauth.google.authorize_access_token(request)
@@ -35,19 +39,35 @@ async def auth_callback(request: Request):
             app_logger.debug("No userinfo in token, parsing ID token")
             user_info = await oauth.google.parse_id_token(request, token)
 
+        email = user_info["email"]
+        name = user_info.get("name", "")
+
+        # Use the updated create_user function (which now handles existing users)
+        db_user = await create_user(session=session, email=email, name=name)
+
+        scopes = ",".join(token.get("scope", "").split())
+
+        # Use the updated create_oauth_token function (which now handles existing tokens)
+        await create_oauth_token(
+            user_id=db_user.id,
+            access_token=token["access_token"],
+            refresh_token=token.get("refresh_token"),
+            expires_in=token.get("expires_in", 3600),
+            scopes=scopes,
+            session=session,
+        )
+
         user_data = {
-            "sub": user_info["sub"],
-            "email": user_info["email"],
-            "name": user_info.get("name"),
+            "sub": str(db_user.id),
+            "email": email,
+            "name": name,
             "picture": user_info.get("picture"),
         }
 
-        app_logger.info(f"User authenticated successfully: {user_data['email']}")
         access_token = create_access_token(
             data=user_data, expires_delta=timedelta(days=10)
         )
         redirect_url = request.session.get("login_redirect", settings.FRONTEND_URL)
-
         app_logger.debug(f"Redirecting authenticated user to: {redirect_url}")
         redirect_response = RedirectResponse(url=redirect_url)
         redirect_response.set_cookie(

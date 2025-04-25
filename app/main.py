@@ -4,12 +4,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from app.config.settings import settings
 from contextlib import asynccontextmanager
-from app.db.tables import create_db_tables
+from app.config.database import create_db_tables
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    create_db_tables()
+    await create_db_tables()
     yield
 
 
