@@ -8,12 +8,12 @@ from app.db.tables import create_db_tables
 
 
 @asynccontextmanager
-async def lifespan(app:FastAPI):
+async def lifespan(app: FastAPI):
     create_db_tables()
     yield
 
 
-app = FastAPI(title="Sanku Backend",lifespan=lifespan)
+app = FastAPI(title="Sanku Backend", lifespan=lifespan)
 
 app.include_router(chat.router)
 app.include_router(auth.router)

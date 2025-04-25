@@ -6,8 +6,14 @@ from typing import Annotated
 from fastapi import Depends
 
 
-connect_args = {"check_same_thread": False}
-engine = create_engine(settings.DATABASE_URL, connect_args=connect_args)
+class User(SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    name: str
+    email: str
+    age: int
+
+
+engine = create_engine(url=settings.DATABASE_URL, echo=True)
 
 
 def create_db_tables():
@@ -20,10 +26,3 @@ def get_session():
 
 
 SessionDep = Annotated[Session, Depends(get_session)]
-
-
-class User(SQLModel, table=True):
-    id: Optional[int] = Field(default=uuid.uuid5, primary_key=True)
-    name: str
-    email: str
-    age: int
