@@ -17,4 +17,6 @@ class UserOathToken(SQLModel, table=True):
     refresh_token: str = Field(default=None)
     expires_at: int  # Timestamp when the token expires
     scopes: str = Field(default="")
-    updated_at: datetime.datetime = Field(default_factory=datetime.datetime.utcnow)
+    updated_at: datetime.datetime = Field(
+        default_factory=datetime.datetime.now(datetime.UTC)
+    )

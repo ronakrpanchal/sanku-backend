@@ -6,6 +6,7 @@ from datetime import timedelta
 from app.config.loggers import app_logger
 from app.db.queries.user_queries import create_user, create_oauth_token
 from app.config.database import SessionDep
+from pprint import pprint
 
 router = APIRouter(tags=["Auth"])
 
@@ -42,19 +43,17 @@ async def auth_callback(request: Request, session: SessionDep):
         email = user_info["email"]
         name = user_info.get("name", "")
 
-        # Use the updated create_user function (which now handles existing users)
         db_user = await create_user(session=session, email=email, name=name)
 
         scopes = ",".join(token.get("scope", "").split())
 
-        # Use the updated create_oauth_token function (which now handles existing tokens)
         await create_oauth_token(
+            session=session,
             user_id=db_user.id,
             access_token=token["access_token"],
             refresh_token=token.get("refresh_token"),
             expires_in=token.get("expires_in", 3600),
             scopes=scopes,
-            session=session,
         )
 
         user_data = {

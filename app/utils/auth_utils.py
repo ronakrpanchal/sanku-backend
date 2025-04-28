@@ -22,6 +22,7 @@ oauth.register(
     client_kwargs={
         "scope": "openid profile email https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/documents"
     },
+    access_type="offline",
 )
 
 
