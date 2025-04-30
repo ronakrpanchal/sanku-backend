@@ -3,17 +3,20 @@ import uuid
 import time
 import datetime
 from app.db.tables import User, UserOathToken
-from app.config.database import SessionDep
+from app.config.database import SessionDep, get_current_session, get_session
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.config.loggers import app_logger
 
 
-async def get_user_by_email(email: str, session: SessionDep) -> User | None:
+async def get_user_by_email(email: str) -> User | None:
+    session = get_current_session()
     result = await session.exec(select(User).where(User.email == email))
     return result.first()
 
 
-async def create_user(session: SessionDep, email: str, name: str) -> User:
+async def create_user(email: str, name: str) -> User:
     """Get existing user or create a new one if not found"""
+    session = get_current_session()
     db_user = await get_user_by_email(email=email, session=session)
 
     if not db_user:
@@ -30,9 +33,8 @@ async def create_user(session: SessionDep, email: str, name: str) -> User:
     return db_user
 
 
-async def get_user_oauth_token(
-    user_id: uuid.UUID, session: SessionDep
-) -> UserOathToken | None:
+async def get_user_oauth_token(user_id: uuid.UUID) -> UserOathToken | None:
+    session = get_current_session()
     result = await session.exec(
         select(UserOathToken).where(UserOathToken.user_id == user_id)
     )
@@ -45,9 +47,9 @@ async def create_oauth_token(
     refresh_token: str | None,
     expires_in: int,
     scopes: str,
-    session: SessionDep,
 ) -> UserOathToken:
     """Get existing OAuth token and update it, or create a new one if not found"""
+    session = get_current_session()
     existing_token = await get_user_oauth_token(user_id, session=session)
 
     current_time = int(time.time())
