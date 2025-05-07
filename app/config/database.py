@@ -1,5 +1,6 @@
 import contextvars
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import SQLModel
 from fastapi import Depends
@@ -18,20 +19,12 @@ async def create_db_tables():
         await conn.run_sync(SQLModel.metadata.create_all)
 
 
-async def get_session() -> AsyncGenerator[AsyncSession, None]:
-    async with AsyncSession(engine) as session:
-        token = session_context.set(session)
-        try:
-            yield session
-        finally:
-            session_context.reset(token)
+async def get_async_session() -> AsyncGenerator:
+    async_session = sessionmaker(
+        bind=engine, class_=AsyncSession, expire_on_commit=False
+    )
+    async with async_session() as session:
+        yield session
 
 
-SessionDep = Annotated[AsyncSession, Depends(get_session)]
-
-
-def get_current_session() -> AsyncSession:
-    session = session_context.get()
-    if session is None:
-        raise RuntimeError("No database session found in context")
-    return session
+SessionDep = Annotated[AsyncSession, Depends(get_async_session)]

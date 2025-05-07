@@ -1,6 +1,5 @@
 import uuid
 from sqlmodel import Field, SQLModel
-from app.config.database import SessionDep
 import datetime
 
 
@@ -15,7 +14,7 @@ class UserOathToken(SQLModel, table=True):
     user_id: uuid.UUID = Field(foreign_key="user.id")
     access_token: str
     refresh_token: str = Field(default=None)
-    expires_at: int  # Timestamp when the token expires
+    expires_at: int
     scopes: str = Field(default="")
     updated_at: datetime.datetime = Field(
         default_factory=datetime.datetime.now(datetime.UTC)
