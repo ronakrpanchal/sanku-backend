@@ -1,13 +1,21 @@
 from fastapi import APIRouter
 from app.config.loggers import llm_logger
 from app.services.chat_service import chat_with_stream
-from app.models.general_models import ChatRequest
+from app.schemas.general_schema import ChatRequest
 from fastapi.responses import StreamingResponse
 from app.utils.prompt_utils import prompt_render
-from app.models.prompt_models import ChatPrompt
-
+from app.schemas.prompt_schema import ChatPrompt
+from pydantic import BaseModel
+from typing import Optional
+from uuid import UUID
 
 router = APIRouter(tags=["Chat"])
+
+
+class ChatStreamRequestModel(BaseModel):
+    user_id: UUID
+    chat_id: Optional[UUID] = None
+    query: str
 
 
 @router.post("/chat")

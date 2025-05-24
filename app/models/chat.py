@@ -1,15 +1,12 @@
 import uuid
 from sqlmodel import Field, SQLModel
+from app.core.models import UUIDModel, TimestampModel
 import datetime
 
 
-class Chat(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+class Chat(UUIDModel, TimestampModel, SQLModel, table=True):
     user_id: uuid.UUID = Field(foreign_key="user.id")
     title: str = Field(default="Untitled Chat")
-    created_at: datetime.datetime = Field(
-        default_factory=lambda: datetime.datetime.now(datetime.UTC)
-    )
 
 
 class Message(SQLModel, table=True):
@@ -20,5 +17,5 @@ class Message(SQLModel, table=True):
     created_at: datetime.datetime = Field(
         default_factory=lambda: datetime.datetime.now(datetime.UTC)
     )
-    feedback: str | None = None  # Optional: "like", "dislike", "flag"
-    metadata: dict | None = None  # Optional: extra info like function calls etc.
+    feedback: str | None = None
+    metadata: dict | None = None

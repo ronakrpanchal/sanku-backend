@@ -4,7 +4,7 @@ from app.config.settings import settings
 from app.config.loggers import llm_logger
 from typing import AsyncGenerator
 from app.utils.prompt_utils import prompt_render
-from app.models.prompt_models import ChatPrompt
+from app.schemas.prompt_schema import ChatPrompt
 
 
 def get_llm_client_and_model(provider: str):

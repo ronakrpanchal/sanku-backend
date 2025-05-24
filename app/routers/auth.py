@@ -4,7 +4,7 @@ from app.utils.auth_utils import oauth, create_access_token, get_current_user
 from app.config.settings import settings
 from datetime import timedelta
 from app.config.loggers import app_logger
-from app.db.queries.user_queries import create_user, create_oauth_token
+from app.models.queries.user_queries import create_user, create_oauth_token
 from app.config.database import SessionDep
 from pprint import pprint
 
