@@ -9,9 +9,8 @@ class Settings(BaseSettings):
     FASTAPI_KEY: str
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
-    FASTAPI_KEY: str
     FRONTEND_URL: str
-    DATABASE_URL: str
+    MONGODB_URL: str
 
     class Config:
         env_file = ".env"

@@ -1,39 +1,24 @@
-import uuid as uuid_pkg
-from datetime import datetime, timezone
-
 from pydantic import BaseModel
-from sqlalchemy import text
-from sqlmodel import Field, SQLModel
+from typing import List, Optional
+from datetime import datetime, timezone
+from beanie import Document
 
 
-class HealthCheck(BaseModel):
-    name: str
-    version: str
-    description: str
+class ChatRequest(BaseModel):
+    user_id: str
+    chat_id: str
+    query: str
 
 
-class UUIDModel(SQLModel):
-    uuid: uuid_pkg.UUID = Field(
-        default_factory=uuid_pkg.uuid4,
-        primary_key=True,
-        index=True,
-        nullable=False,
-        sa_column_kwargs={"server_default": text("gen_random_uuid()"), "unique": True},
-    )
+class Chat(Document):
+    user_id: str
+    chat_id: str
+    query: str
+    created_at: datetime = datetime.now(timezone.utc)
+
+    class Settings:
+        collection_name = "chats"
 
 
-class TimestampModel(SQLModel):
-    created_at: datetime = Field(
-        default_factory=datetime.now(timezone.utc),
-        nullable=False,
-        sa_column_kwargs={"server_default": text("current_timestamp(0)")},
-    )
-
-    updated_at: datetime = Field(
-        default_factory=datetime.now(timezone.utc),
-        nullable=False,
-        sa_column_kwargs={
-            "server_default": text("current_timestamp(0)"),
-            "onupdate": text("current_timestamp(0)"),
-        },
-    )
+class Message(Document):
+    pass

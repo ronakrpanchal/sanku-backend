@@ -8,14 +8,9 @@ from app.schemas.prompt_schema import ChatPrompt
 from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID
+from app.core.models import ChatRequest
 
 router = APIRouter(tags=["Chat"])
-
-
-class ChatStreamRequestModel(BaseModel):
-    user_id: UUID
-    chat_id: Optional[UUID] = None
-    query: str
 
 
 @router.post("/chat")
@@ -26,10 +21,10 @@ async def chat(body: ChatRequest):
 
 
 @router.post("/chat-stream")
-async def chat_stream():
+async def chat_stream(body: ChatRequest):
     try:
         return StreamingResponse(
-            chat_with_stream(provider="openai", query="prodive me best eassy on nepal"),
+            chat_with_stream(provider="openai", query=""),
         )
     except Exception as e:
         return str(e)

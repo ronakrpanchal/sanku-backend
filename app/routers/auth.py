@@ -4,8 +4,6 @@ from app.utils.auth_utils import oauth, create_access_token, get_current_user
 from app.config.settings import settings
 from datetime import timedelta
 from app.config.loggers import app_logger
-from app.models.queries.user_queries import create_user, create_oauth_token
-from app.config.database import SessionDep
 from pprint import pprint
 
 router = APIRouter(tags=["Auth"])
@@ -31,7 +29,7 @@ async def login(request: Request):
 
 
 @router.get("/google/auth")
-async def auth_callback(request: Request, session: SessionDep):
+async def auth_callback(request: Request):
     app_logger.info("Received OAuth callback from Google")
     try:
         token = await oauth.google.authorize_access_token(request)
@@ -44,31 +42,10 @@ async def auth_callback(request: Request, session: SessionDep):
         name = user_info.get("name", "")
 
         # await create_user(email=email, name=name)
-        db_user = await create_user(email=email, name=name, session=session)
 
         scopes = ",".join(token.get("scope", "").split())
 
-        await create_oauth_token(
-            user_id=db_user.id,
-            session=session,
-            # user_id="42e17b93-c30a-44e3-a92a-5086bde414b2",
-            access_token=token["access_token"],
-            refresh_token=token.get("refresh_token"),
-            expires_in=token.get("expires_in", 3600),
-            scopes=scopes,
-        )
-
-        user_data = {
-            "sub": str(db_user.id),
-            # "sub": str("42e17b93-c30a-44e3-a92a-5086bde414b2"),
-            "email": email,
-            "name": name,
-            "picture": user_info.get("picture"),
-        }
-
-        access_token = create_access_token(
-            data=user_data, expires_delta=timedelta(days=10)
-        )
+        access_token = create_access_token(data={}, expires_delta=timedelta(days=10))
         redirect_url = request.session.get("login_redirect", settings.FRONTEND_URL)
         app_logger.debug(f"Redirecting authenticated user to: {redirect_url}")
         redirect_response = RedirectResponse(url=redirect_url)

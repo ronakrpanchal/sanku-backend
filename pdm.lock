@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:9a315faa83e8357de26f69bbde5b70f8d5fbd95c1da9d3c8a2d8be6e1673de69"
+content_hash = "sha256:b93cf31b674d527950521222a029c7d4b96204d7e7b0f097b5e7ffde07519d4f"
 
 [[metadata.targets]]
 requires_python = ">=3.12.0"
@@ -67,6 +67,23 @@ dependencies = [
 files = [
     {file = "authlib-1.5.2-py2.py3-none-any.whl", hash = "sha256:8804dd4402ac5e4a0435ac49e0b6e19e395357cfa632a3f624dcb4f6df13b4b1"},
     {file = "authlib-1.5.2.tar.gz", hash = "sha256:fe85ec7e50c5f86f1e2603518bb3b4f632985eb4a355e52256530790e326c512"},
+]
+
+[[package]]
+name = "beanie"
+version = "1.29.0"
+summary = ""
+dependencies = [
+    "click",
+    "lazy-model",
+    "motor",
+    "pydantic",
+    "toml",
+    "typing-extensions",
+]
+files = [
+    {file = "beanie-1.29.0-py3-none-any.whl", hash = "sha256:aeb53e6648ceccf70eb35c35233e45406fe4de4c9887075581c01b968bfec2c7"},
+    {file = "beanie-1.29.0.tar.gz", hash = "sha256:f078620c3515a8222d40a3a8ab195b1d8f1153010f009ed5d205b73371c43869"},
 ]
 
 [[package]]
@@ -236,6 +253,15 @@ summary = ""
 files = [
     {file = "distro-1.9.0-py3-none-any.whl", hash = "sha256:7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2"},
     {file = "distro-1.9.0.tar.gz", hash = "sha256:2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed"},
+]
+
+[[package]]
+name = "dnspython"
+version = "2.7.0"
+summary = ""
+files = [
+    {file = "dnspython-2.7.0-py3-none-any.whl", hash = "sha256:b4c34b7d10b51bcc3a5071e7b8dee77939f1e878477eeecc965e9835f63c6c86"},
+    {file = "dnspython-2.7.0.tar.gz", hash = "sha256:ce9c432eda0dc91cf618a5cedf1a4e142651196bbcd2c80e89ed5a907e5cfaf1"},
 ]
 
 [[package]]
@@ -476,6 +502,18 @@ files = [
 ]
 
 [[package]]
+name = "lazy-model"
+version = "0.2.0"
+summary = ""
+dependencies = [
+    "pydantic",
+]
+files = [
+    {file = "lazy-model-0.2.0.tar.gz", hash = "sha256:57c0e91e171530c4fca7aebc3ac05a163a85cddd941bf7527cc46c0ddafca47c"},
+    {file = "lazy_model-0.2.0-py3-none-any.whl", hash = "sha256:5a3241775c253e36d9069d236be8378288a93d4fc53805211fd152e04cc9c342"},
+]
+
+[[package]]
 name = "logging"
 version = "0.4.9.6"
 summary = ""
@@ -554,6 +592,18 @@ files = [
     {file = "milvus_lite-2.4.12-py3-none-macosx_11_0_arm64.whl", hash = "sha256:20087663e7b4385050b7ad08f1f03404426d4c87b1ff91d5a8723eee7fd49e88"},
     {file = "milvus_lite-2.4.12-py3-none-manylinux2014_aarch64.whl", hash = "sha256:a0f3a5ddbfd19f4a6b842b2fd3445693c796cde272b701a1646a94c1ac45d3d7"},
     {file = "milvus_lite-2.4.12-py3-none-manylinux2014_x86_64.whl", hash = "sha256:334037ebbab60243b5d8b43d54ca2f835d81d48c3cda0c6a462605e588deb05d"},
+]
+
+[[package]]
+name = "motor"
+version = "3.7.1"
+summary = ""
+dependencies = [
+    "pymongo",
+]
+files = [
+    {file = "motor-3.7.1-py3-none-any.whl", hash = "sha256:8a63b9049e38eeeb56b4fdd57c3312a6d1f25d01db717fe7d82222393c410298"},
+    {file = "motor-3.7.1.tar.gz", hash = "sha256:27b4d46625c87928f331a6ca9d7c51c2f518ba0e270939d395bc1ddc89d64526"},
 ]
 
 [[package]]
@@ -899,6 +949,44 @@ files = [
 ]
 
 [[package]]
+name = "pymongo"
+version = "4.13.0"
+summary = ""
+dependencies = [
+    "dnspython",
+]
+files = [
+    {file = "pymongo-4.13.0-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:007450b8c8d17b4e5b779ab6e1938983309eac26b5b8f0863c48effa4b151b07"},
+    {file = "pymongo-4.13.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:899a5ea9cd32b1b0880015fdceaa36a41140a8c2ce8621626c52f7023724aed6"},
+    {file = "pymongo-4.13.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f0b26cd4e090161927b7a81741a3627a41b74265dfb41c6957bfb474504b4b42"},
+    {file = "pymongo-4.13.0-cp312-cp312-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:b54e19e0f6c8a7ad0c5074a8cbefb29c12267c784ceb9a1577a62bbc43150161"},
+    {file = "pymongo-4.13.0-cp312-cp312-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:6208b83e7d566935218c0837f3b74c7d2dda83804d5d843ce21a55f22255ab74"},
+    {file = "pymongo-4.13.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3f33b8c1405d05517dce06756f2800b37dd098216cae5903cd80ad4f0a9dad08"},
+    {file = "pymongo-4.13.0-cp312-cp312-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:02f0e1af87280697a1a8304238b863d4eee98c8b97f554ee456c3041c0f3a021"},
+    {file = "pymongo-4.13.0-cp312-cp312-win32.whl", hash = "sha256:5dea2f6b44697eda38a11ef754d2adfff5373c51b1ffda00b9fedc5facbd605f"},
+    {file = "pymongo-4.13.0-cp312-cp312-win_amd64.whl", hash = "sha256:c03e02129ad202d8e146480b398c4a3ea18266ee0754b6a4805de6baf4a6a8c7"},
+    {file = "pymongo-4.13.0-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:92f5e75ae265e798be1a8a40a29e2ab934e156f3827ca0e1c47e69d43f4dcb31"},
+    {file = "pymongo-4.13.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:3d631d879e934b46222f5092d8951cbb9fe83542649697c8d342ea7b5479f118"},
+    {file = "pymongo-4.13.0-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:be048fb78e165243272a8cdbeb40d53eace82424b95417ab3ab6ec8e9b00c59b"},
+    {file = "pymongo-4.13.0-cp313-cp313-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:d81d159bd23d8ac53a6e819cccee991cb9350ab2541dfaa25aeb2f712d23b0a5"},
+    {file = "pymongo-4.13.0-cp313-cp313-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:8af08ba2886f08d334bc7e5d5c662c60ea2f16e813a2c35106f399463fa11087"},
+    {file = "pymongo-4.13.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6b91f59137e46cd3ff17d5684a18e8006d65d0ee62eb1068b512262d1c2c5ae8"},
+    {file = "pymongo-4.13.0-cp313-cp313-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:61733c8f1ded90ab671a08033ee99b837073c73e505b3b3b633a55a0326e77f4"},
+    {file = "pymongo-4.13.0-cp313-cp313-win32.whl", hash = "sha256:d10d3967e87c21869f084af5716d02626a17f6f9ccc9379fcbece5821c2a9fb4"},
+    {file = "pymongo-4.13.0-cp313-cp313-win_amd64.whl", hash = "sha256:a9fe172e93551ddfdb94b9ad34dccebc4b7b680dc1d131bc6bd661c4a5b2945c"},
+    {file = "pymongo-4.13.0-cp313-cp313t-macosx_10_13_x86_64.whl", hash = "sha256:5adc1349fd5c94d5dfbcbd1ad9858d1df61945a07f5905dcf17bb62eb4c81f93"},
+    {file = "pymongo-4.13.0-cp313-cp313t-macosx_11_0_arm64.whl", hash = "sha256:8e11ea726ff8ddc8c8393895cd7e93a57e2558c27273d3712797895c53d25692"},
+    {file = "pymongo-4.13.0-cp313-cp313t-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c02160ab3a67eca393a2a2bb83dccddf4db2196d0d7c6a980a55157e4bdadc06"},
+    {file = "pymongo-4.13.0-cp313-cp313t-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:fca24e4df05501420b2ce2207c03f21fcbdfac1e3f41e312e61b8f416c5b4963"},
+    {file = "pymongo-4.13.0-cp313-cp313t-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:50c503b7e809e54740704ec4c87a0f2ccdb910c3b1d36c07dbd2029b6eaa6a50"},
+    {file = "pymongo-4.13.0-cp313-cp313t-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:66800de4f4487e7c437991b44bc1e717aadaf06e67451a760efe5cd81ce86575"},
+    {file = "pymongo-4.13.0-cp313-cp313t-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:82c36928c1c26580ce4f2497a6875968636e87c77108ff253d76b1355181a405"},
+    {file = "pymongo-4.13.0-cp313-cp313t-win32.whl", hash = "sha256:1397eac713b84946210ab556666cfdd787eee824e910fbbe661d147e110ec516"},
+    {file = "pymongo-4.13.0-cp313-cp313t-win_amd64.whl", hash = "sha256:99a52cfbf31579cc63c926048cd0ada6f96c98c1c4c211356193e07418e6207c"},
+    {file = "pymongo-4.13.0.tar.gz", hash = "sha256:92a06e3709e3c7e50820d352d3d4e60015406bcba69808937dac2a6d22226fde"},
+]
+
+[[package]]
 name = "python-dateutil"
 version = "2.9.0.post0"
 summary = ""
@@ -1112,6 +1200,15 @@ dependencies = [
 files = [
     {file = "starlette-0.46.2-py3-none-any.whl", hash = "sha256:595633ce89f8ffa71a015caed34a5b2dc1c0cdb3f0f1fbd1e69339cf2abeec35"},
     {file = "starlette-0.46.2.tar.gz", hash = "sha256:7f7361f34eed179294600af672f565727419830b54b7b084efe44bb82d2fccd5"},
+]
+
+[[package]]
+name = "toml"
+version = "0.10.2"
+summary = ""
+files = [
+    {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
+    {file = "toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"},
 ]
 
 [[package]]
