@@ -17,23 +17,33 @@ class MilvusService:
 
     async def init_collection(self):
         """Initialize the chat memory collection if it doesn't exist."""
-        has_collection = await self.client.has_collection(COLLECTION_NAME)
+        has_collection = self.sync_client.has_collection(COLLECTION_NAME)
 
         if not has_collection:
             schema = self.client.create_schema(auto_id=True, enable_dynamic_field=False)
-            schema.add_field(name="user_id", dtype=DataType.VARCHAR, max_length=36)
-            schema.add_field(name="chat_id", dtype=DataType.VARCHAR, max_length=36)
-            schema.add_field(name="message", dtype=DataType.VARCHAR, max_length=1024)
-            schema.add_field(name="role", dtype=DataType.VARCHAR, max_length=20)
-            schema.add_field(name="created_at", dtype=DataType.VARCHAR, max_length=30)
+            schema.add_field(field_name="id", datatype=DataType.INT64, is_primary=True)
             schema.add_field(
-                name="embedding", dtype=DataType.FLOAT_VECTOR, dim=VECTOR_DIM
+                field_name="user_id", datatype=DataType.VARCHAR, max_length=36
+            )
+            schema.add_field(
+                field_name="chat_id", datatype=DataType.VARCHAR, max_length=36
+            )
+            schema.add_field(
+                field_name="message", datatype=DataType.VARCHAR, max_length=1024
+            )
+            schema.add_field(
+                field_name="role", datatype=DataType.VARCHAR, max_length=20
+            )
+            schema.add_field(
+                field_name="created_at", datatype=DataType.VARCHAR, max_length=30
+            )
+            schema.add_field(
+                field_name="embedding", datatype=DataType.FLOAT_VECTOR, dim=VECTOR_DIM
             )
 
             index_params = {
                 "metric_type": "COSINE",
                 "index_type": "HNSW",
-                "params": {"M": 8, "efConstruction": 64},
             }
 
             await self.client.create_collection(

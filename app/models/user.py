@@ -1,6 +1,7 @@
 import uuid
 from sqlmodel import Field, SQLModel
 import datetime
+from app.core.models import UUIDModel, TimestampModel
 
 
 class User(SQLModel, table=True):
@@ -19,3 +20,16 @@ class UserOathToken(SQLModel, table=True):
     updated_at: datetime.datetime = Field(
         default_factory=datetime.datetime.now(datetime.UTC)
     )
+
+
+class Chat(UUIDModel, TimestampModel, SQLModel, table=True):
+    user_id: uuid.UUID = Field(foreign_key="user.id")
+    title: str = Field(default="Untitled Chat")
+
+
+class Message(UUIDModel, TimestampModel, SQLModel, table=True):
+    chat_id: uuid.UUID = Field(foreign_key="chat.id")
+    role: str
+    content: str
+    feedback: str | None = None
+    metadata: dict | None = None

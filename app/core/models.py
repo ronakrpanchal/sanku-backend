@@ -1,5 +1,5 @@
 import uuid as uuid_pkg
-from datetime import datetime
+from datetime import datetime, timezone
 
 from pydantic import BaseModel
 from sqlalchemy import text
@@ -24,13 +24,13 @@ class UUIDModel(SQLModel):
 
 class TimestampModel(SQLModel):
     created_at: datetime = Field(
-        default_factory=datetime.now(datetime.timezone.utc),
+        default_factory=datetime.now(timezone.utc),
         nullable=False,
         sa_column_kwargs={"server_default": text("current_timestamp(0)")},
     )
 
     updated_at: datetime = Field(
-        default_factory=datetime.now(datetime.timezone.utc),
+        default_factory=datetime.now(timezone.utc),
         nullable=False,
         sa_column_kwargs={
             "server_default": text("current_timestamp(0)"),
