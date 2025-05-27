@@ -1,5 +1,5 @@
 from app.config.settings import settings
-from pymilvus import AsyncMilvusClient, MilvusClient, DataType, Collection
+from pymilvus import AsyncMilvusClient, MilvusClient, DataType
 from typing import List, Dict, Any, Optional
 
 COLLECTION_NAME = "chat_memory"
@@ -14,6 +14,7 @@ class MilvusService:
         self.sync_client = MilvusClient(
             uri=settings.MILVUS_URL, token=settings.MILVUS_TOKEN
         )
+        self.collection_loaded = False
 
     async def init_collection(self):
         """Initialize the chat memory collection if it doesn't exist."""
@@ -107,6 +108,11 @@ class MilvusService:
 
         res = await self.client.insert(COLLECTION_NAME, data)
         return res.primary_keys
+    
+    async def ensure_collection_loaded(self):
+        if not self.collection_loaded:
+            await self.client.load_collection(COLLECTION_NAME)
+            self.collection_loaded = True
 
     async def search_similar_messages(
         self,
@@ -124,7 +130,8 @@ class MilvusService:
         if chat_id:
             expr += f" and chat_id == '{chat_id}'"
 
-        await self.client.load_collection(COLLECTION_NAME)
+        # await self.client.load_collection(COLLECTION_NAME)
+        await self.ensure_collection_loaded()
 
         results = await self.client.search(
             collection_name=COLLECTION_NAME,
@@ -172,7 +179,8 @@ class MilvusService:
         expr = f"chat_id == '{chat_id}'"
         output_fields = ["user_id", "message", "role", "created_at"]
 
-        await self.client.load_collection(COLLECTION_NAME)
+        # await self.client.load_collection(COLLECTION_NAME)
+        await self.ensure_collection_loaded()
         res = await self.client.query(COLLECTION_NAME, expr, output_fields)
 
         return res

@@ -5,10 +5,12 @@ from starlette.middleware.sessions import SessionMiddleware
 from app.config.settings import settings
 from contextlib import asynccontextmanager
 from app.services.milvus_service import init_milvus, close_milvus
+from app.services.mongodb_service import init_db
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    await init_db()
     await init_milvus()
     yield
     await close_milvus()

@@ -16,6 +16,21 @@ def get_llm_client_and_model(provider: str):
         error_msg = f"Unsupported LLM provider: {provider}"
         llm_logger.error(error_msg)
         raise ValueError(error_msg)
+    
+async def normal_Chat(provider: str, query: str) -> str:
+    client, model = get_llm_client_and_model(provider)
+    llm_logger.info(f"{provider.capitalize()} sending prompt: {query}")
+    chat_prompt = prompt_render(prompt_obj=ChatPrompt(query=query))
+    try:
+        response = await client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": chat_prompt}],
+        )
+        llm_logger.info(f"{provider.capitalize()} received response")
+        return response.choices[0].message.content
+    except Exception as e:
+        llm_logger.error(f"{provider.capitalize()} LLM error: {e}")
+        raise e
 
 
 async def chat_with_stream(provider: str, query: str) -> AsyncGenerator[str, None]:

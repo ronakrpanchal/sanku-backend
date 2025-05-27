@@ -19,3 +19,12 @@ _
 async def init_db():
     client = AsyncIOMotorClient(settings.MONGODB_URL)
     await init_beanie(database=client.sanku, document_models=[Chat, Message])
+    
+async def store_chat(chat:Chat):
+    await chat.insert()
+    
+async def store_message(message: Message):
+    await message.insert()
+    
+def first_usr(user_id:str):
+    return Chat.find_one(Chat.user_id == user_id) is None

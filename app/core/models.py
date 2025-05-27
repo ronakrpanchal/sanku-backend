@@ -1,6 +1,5 @@
-from pydantic import BaseModel
-from typing import List, Optional
-from datetime import datetime, timezone
+from pydantic import BaseModel, Field
+from datetime import datetime
 from beanie import Document
 
 
@@ -14,11 +13,18 @@ class Chat(Document):
     user_id: str
     chat_id: str
     query: str
-    created_at: datetime = datetime.now(timezone.utc)
+    created_at: datetime = Field(default_factory=datetime.now)
 
     class Settings:
-        collection_name = "chats"
+        name = "chats"
 
 
 class Message(Document):
-    pass
+    user_id : str
+    chat_id : str
+    role : str
+    content : str
+    created_at : datetime = Field(default_factory=datetime.now)
+    
+    class Settings:
+        name = "messages"
