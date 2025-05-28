@@ -1,10 +1,8 @@
 from pydantic import BaseModel
-from typing import List, Optional
-
+from typing import List, Optional, Dict, Any
 
 class ChatContext(BaseModel):
-    context : Optional[List[str]] = None
-
+    context: Optional[List[Dict[str, Any]]] = None  # Changed to accept Dict format
 
 class ChatPrompt(BaseModel):
     context: Optional[ChatContext] = None

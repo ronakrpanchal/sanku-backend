@@ -33,9 +33,31 @@ async def get_context(user_id: str, chat_id: str, query: str) -> List[Dict]:
 
     # Format messages for LLM input
     def format_msg(m):
-        return {
-            "role": m["role"] if isinstance(m, dict) else m.role,
-            "content": m["content"] if isinstance(m, dict) else m.content
-        }
+        if isinstance(m, dict):
+            # Milvus results have 'message' field, not 'content'
+            return {
+                "role": m["role"],
+                "content": m["message"]  # Changed from m["content"] to m["message"]
+            }
+        else:
+            # MongoDB Message objects
+            return {
+                "role": m.role,
+                "content": m.content
+            }
 
-    return [format_msg(m) for m in similar_messages] + [format_msg(m) for m in recent_messages]
+    # Combine and deduplicate messages
+    formatted_similar = [format_msg(m) for m in similar_messages]
+    formatted_recent = [format_msg(m) for m in recent_messages]
+    
+    # Remove duplicates while preserving order
+    seen = set()
+    combined_messages = []
+    
+    for msg in formatted_similar + formatted_recent:
+        msg_key = (msg["role"], msg["content"])
+        if msg_key not in seen:
+            seen.add(msg_key)
+            combined_messages.append(msg)
+    
+    return combined_messages

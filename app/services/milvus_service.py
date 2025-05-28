@@ -1,10 +1,10 @@
 from app.config.settings import settings
 from pymilvus import AsyncMilvusClient, MilvusClient, DataType
 from typing import List, Dict, Any, Optional
+from datetime import datetime
 
 COLLECTION_NAME = "chat_memory"
-VECTOR_DIM = 1536
-
+VECTOR_DIM = 384
 
 class MilvusService:
     def __init__(self):
@@ -41,38 +41,35 @@ class MilvusService:
             schema.add_field(
                 field_name="embedding", datatype=DataType.FLOAT_VECTOR, dim=VECTOR_DIM
             )
-
-            index_params = {
-                "metric_type": "COSINE",
-                "index_type": "HNSW",
-            }
+            
+            index_params = self.sync_client.prepare_index_params()
+            
+            index_params.add_index(
+                field_name="embedding",
+                index_type="HNSW",
+                metric_type="COSINE",
+            )
+            
+            index_params.add_index(
+                field_name="user_id",
+                index_type="INVERTED",
+            )
+            
+            index_params.add_index(
+                field_name="chat_id",
+                index_type="INVERTED",
+            )
+            
 
             await self.client.create_collection(
                 collection_name=COLLECTION_NAME,
                 schema=schema,
+                index_params=index_params
             )
 
-            # Create index on the vector field
-            await self.client.create_index(
-                collection_name=COLLECTION_NAME,
-                field_name="embedding",
-                index_params=index_params,
-            )
-
-            # Create index on user_id for faster filtering
-            await self.client.create_index(
-                collection_name=COLLECTION_NAME,
-                field_name="user_id",
-                index_params={"index_type": "STL_SORT"},
-            )
-
-            # Create index on chat_id for faster filtering
-            await self.client.create_index(
-                collection_name=COLLECTION_NAME,
-                field_name="chat_id",
-                index_params={"index_type": "STL_SORT"},
-            )
-
+        else:
+            print("Collection already exists. Skipping creation.")
+    
     async def insert_message(
         self,
         user_id: str,
@@ -80,21 +77,25 @@ class MilvusService:
         message: str,
         embedding: List[float],
         role: str,
-        created_at: str,
+        created_at: str = None,
     ) -> str:
         """Insert a message with its embedding into the collection."""
-        data = [
-            {"user_id": user_id},
-            {"chat_id": chat_id},
-            {"message": message},
-            {"role": role},
-            {"created_at": created_at},
-            {"embedding": embedding},
-        ]
+        
+        if created_at is None:
+            created_at = datetime.now().isoformat()
+        
+        # Single dictionary with all fields
+        data = [{
+            "user_id": user_id,
+            "chat_id": chat_id,
+            "message": message,
+            "role": role,
+            "created_at": created_at,
+            "embedding": embedding,
+        }]
 
-        res = await self.client.insert(COLLECTION_NAME, data)
-        return res.primary_keys[0]
-
+        await self.client.insert(COLLECTION_NAME, data)
+        
     async def batch_insert_messages(self, messages: List[Dict[str, Any]]) -> List[str]:
         """Batch insert multiple messages with their embeddings."""
         data = [
@@ -137,9 +138,9 @@ class MilvusService:
             collection_name=COLLECTION_NAME,
             data=[query_embedding],
             anns_field="embedding",
-            param=search_params,
+            search_params=search_params,
             limit=limit,
-            expr=expr,
+            filter=expr,
             output_fields=output_fields,
         )
 
@@ -189,14 +190,12 @@ class MilvusService:
         """Close the Milvus client connection."""
         await self.client.close()
 
-
 milvus_service = MilvusService()
-
 
 async def init_milvus():
     await milvus_service.init_collection()
+    await milvus_service.ensure_collection_loaded()
     print("Milvus collection initialized.")
-
 
 async def close_milvus():
     await milvus_service.close()

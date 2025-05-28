@@ -6,7 +6,6 @@ from typing import AsyncGenerator
 from app.utils.prompt_utils import prompt_render
 from app.schemas.prompt_schema import ChatPrompt
 
-
 def get_llm_client_and_model(provider: str):
     if provider == "openai":
         return AsyncOpenAI(api_key=settings.OPENAI_API_KEY), "gpt-4o"
