@@ -1,11 +1,11 @@
 from pydantic import BaseModel
-from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo import AsyncMongoClient
 from app.config.settings import settings
 from beanie import init_beanie
 from app.core.models import Chat, Message
 
 
-_mongo_client: AsyncIOMotorClient | None = None
+_mongo_client: AsyncMongoClient | None = None
 
 
 # query: how's the weather today ?
@@ -21,7 +21,7 @@ _
 
 async def init_db():
     global _mongo_client
-    _mongo_client = AsyncIOMotorClient(settings.MONGODB_URL)
+    _mongo_client = AsyncMongoClient(settings.MONGODB_URL)
     database = _mongo_client.get_database(settings.MONGODB_DB)
     await init_beanie(database=database, document_models=[Chat, Message])
     
