@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_SECRET: str
     FRONTEND_URL: str
     MONGODB_URL: str
+    MONGODB_DB: str = "sanku"
 
     class Config:
         env_file = ".env"

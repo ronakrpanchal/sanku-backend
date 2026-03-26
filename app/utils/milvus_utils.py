@@ -13,7 +13,7 @@ async def get_context(user_id: str, chat_id: str, query: str) -> List[Dict]:
     """
     query_embedding = await get_text_embedding(query)
     
-    if first_usr(user_id):
+    if await first_usr(user_id):
         return []
 
     # Semantic similarity from Milvus
