@@ -7,9 +7,6 @@ class Settings(BaseSettings):
     MILVUS_URL: str
     MILVUS_TOKEN: str
     FASTAPI_KEY: str
-    GOOGLE_CLIENT_ID: str
-    GOOGLE_CLIENT_SECRET: str
-    FRONTEND_URL: str
     MONGODB_URL: str
     MONGODB_DB: str = "sanku"
 

@@ -2,14 +2,11 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from app.config.loggers import llm_logger
 from app.services.chat_service import chat_with_stream, normal_Chat
-from app.schemas.general_schema import ChatRequest
 from fastapi.responses import StreamingResponse
 from app.utils.prompt_utils import prompt_render
-from app.schemas.prompt_schema import ChatPrompt
+from app.schemas.prompt_schema import ChatPrompt, ChatContext
 from app.services.mongodb_service import store_chat, store_message
-from app.core.models import Chat,Message
-from uuid import UUID
-from app.core.models import ChatRequest
+from app.core.models import Chat, Message, ChatRequest
 from app.services.milvus_service import milvus_service
 from app.services.embedding_service import get_text_embedding
 from app.utils.milvus_utils import get_context
@@ -60,7 +57,6 @@ async def chat(body: ChatRequest):
             llm_logger.info("No context found, proceeding with query only")
         
         # Create proper ChatPrompt object
-        from app.schemas.prompt_schema import ChatContext
         chat_context = ChatContext(context=context) if context else None
         chat_prompt_obj = ChatPrompt(
             query=body.query, 
