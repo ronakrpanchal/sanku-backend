@@ -10,7 +10,7 @@ def get_llm_client_and_model(provider: str):
     if provider == "openai":
         return AsyncOpenAI(api_key=settings.OPENAI_API_KEY), "gpt-4o"
     elif provider == "groq":
-        return AsyncGroq(api_key=settings.GROQ_API_KEY), "llama3-8b-8192"
+        return AsyncGroq(api_key=settings.GROQ_API_KEY), "llama-3.3-70b-versatile"
     else:
         error_msg = f"Unsupported LLM provider: {provider}"
         llm_logger.error(error_msg)
