@@ -15,7 +15,7 @@ psycopg>=3.2.6
 psycopg2-binary>=2.9.10
 asyncpg>=0.30.0
 pprintpp>=0.4.0
-beanie[srv]>=2.1.0
+beanie[srv]>=2.0.0
 motor>=3.7.1
 pymongo>=4.11.3
 fastembed
